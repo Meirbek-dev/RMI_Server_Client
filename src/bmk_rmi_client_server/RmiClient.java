@@ -1,27 +1,17 @@
 package bmk_rmi_client_server;
 
-import java.rmi.NotBoundException;
-import java.rmi.RemoteException;
 import java.rmi.registry.*;
 
-/**
- *
- * @author meirb
- */
+// Клиент RMI
 public class RmiClient {
 
-    final static String HOST = "localhost";
+    final static String HOST = "localhost"; // Адрес сервера
 
-    public static void main(String... args) throws RemoteException, NotBoundException, InterruptedException {
-        Registry registry = LocateRegistry.getRegistry(HOST, IRemoteHelloService.PORT);
-        IRemoteHelloService service = (IRemoteHelloService) registry.lookup(IRemoteHelloService.BINDING_NAME);
-
-        System.out.println(service.sayHello(new RemoteHello("John", 23)).toString());
-        System.out.println(service.sayHello(new RemoteHello("Jan", 18)));
-        System.out.println(service.sayHello(new RemoteHello("Hans", 24)));
-        System.out.println(service.sayHello(new RemoteHello("Bill", 31)));
-        Thread.sleep(3000);
-
-        service.stopServer();
+    public static void main(String... args) throws Exception {
+        Registry server = LocateRegistry.getRegistry(HOST, IRemoteSolution.PORT);
+        IRemoteSolution remoteService = (IRemoteSolution) server.lookup(IRemoteSolution.SERVICE_NAME);
+        System.out.println(remoteService.getData(new Variables(1, 2, 3))); //a, b, x
+        System.out.println(remoteService.getData(new Variables(6.5, -4, 7)));
+        remoteService.stopServer();
     }
 }

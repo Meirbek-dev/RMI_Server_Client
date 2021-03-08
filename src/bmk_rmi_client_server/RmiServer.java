@@ -1,53 +1,56 @@
 package bmk_rmi_client_server;
 
 import java.rmi.*;
-import java.rmi.registry.LocateRegistry;
-import java.rmi.registry.Registry;
+import java.rmi.registry.*;
 import java.rmi.server.*;
 import java.util.concurrent.atomic.AtomicBoolean;
 
-/**
- *
- * @author meirb
- */
-public class RmiServer implements IRemoteHelloService {
+// Класс сервера RMI
+public class RmiServer implements IRemoteSolution {
 
-    private static AtomicBoolean stopServer = new AtomicBoolean(false);
+    // Потокозащищенная логическая переменная для возможности остановки сервера
+    private static final AtomicBoolean stopServer = new AtomicBoolean(false);
 
     @Override
-    public Object sayHello(RemoteHello data) throws RemoteException {
-        String txt = "Hello, " + data + "!";
+    // Метод получения данных
+    public Object getData(Variables data) {
         try {
-            System.out.println(txt + " from " + UnicastRemoteObject.getClientHost());
+            System.out.println("\nПолучены значения переменных из " + UnicastRemoteObject.getClientHost() + ":");
+            double a = data.getA();
+            double b = data.getB();
+            double x = data.getX();
+
+            if (x >= 5) {
+                double y = (5 * x * x) / (6 * (a + b) * (a + b));
+                data.setY(y);
+            } else {
+                double y = (x * x * x * (a + b));
+                data.setY(y);
+            }
         } catch (ServerNotActiveException e) {
-            System.out.println(e.getMessage());
         }
-        return txt;
+        return data;
     }
 
     @Override
-    public void stopServer() throws RemoteException {
-        System.out.println("Shutting down...");
+    // Метод остановки сервера
+    public void stopServer() {
         stopServer.set(true);
     }
 
-    public static void main(String... args) throws RemoteException, AlreadyBoundException {
-        final Registry registry = LocateRegistry.createRegistry(IRemoteHelloService.PORT);
-
-        final IRemoteHelloService service = new RmiServer();
-        Remote stub = UnicastRemoteObject.exportObject(service, 0);
-        registry.bind(IRemoteHelloService.BINDING_NAME, stub);
-
-        while (!stopServer.get()) {
+    public static void main(String... args) throws AccessException, RemoteException, AlreadyBoundException {
+        System.out.println("Запуск сервиса...");
+        final IRemoteSolution service = new RmiServer();
+        LocateRegistry.createRegistry(IRemoteSolution.PORT).bind(IRemoteSolution.SERVICE_NAME, UnicastRemoteObject.exportObject(service, 0));
+        while (!stopServer.get()) { // Бесконечный цикл, пока переменная stopServer не выключит его
             try {
-                Thread.sleep(100);
-            } catch (InterruptedException e) {
+                Thread.sleep(100); // Небольшая задержка для правильной работы цикла в потоке
+            } catch (InterruptedException e) { // Завершение потока при внешнем прерывании
                 break;
             }
         }
-
-        System.out.println("Server stopped");
+        System.out.println("\nСервер остановлен");
         System.exit(0);
-
     }
+
 }

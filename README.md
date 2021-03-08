@@ -5,6 +5,11 @@
 Лабораторная работа №4  
 Вариант - 1  
 ![primer](primer.png)  
-## Интерфейс программы
-![1](1.png)  
-![2](2.png)
+## Расчёт значения
+![solution](solution.png)
+## Вывод ошибки
+![error](error.png)
+## Сброс значений
+![reset](reset.png)
+## Вывод в консоли
+![console](console.png)
