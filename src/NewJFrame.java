@@ -5,7 +5,6 @@ import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
 import bmk_rmi_client_server.Variables;
 import bmk_rmi_client_server.IRemoteSolution;
-import bmk_rmi_client_server.RmiClient;
 import java.awt.Color;
 
 public class NewJFrame extends javax.swing.JFrame {
@@ -64,7 +63,7 @@ public class NewJFrame extends javax.swing.JFrame {
         jLabelResult.setFont(new java.awt.Font("Times New Roman", 0, 20)); // NOI18N
         jLabelResult.setText("Ответ: Y = ");
         getContentPane().add(jLabelResult);
-        jLabelResult.setBounds(20, 410, 96, 24);
+        jLabelResult.setBounds(20, 410, 280, 24);
 
         jTextFieldA.setFont(new java.awt.Font("Times New Roman", 0, 20)); // NOI18N
         jTextFieldA.addActionListener(new java.awt.event.ActionListener() {
@@ -140,27 +139,12 @@ public class NewJFrame extends javax.swing.JFrame {
             Variables data = new Variables(a, b, x);
             data = (Variables) remoteServer.getData(data);
 
-            jLabelResult.setText("Ответ: Y = " + data.getY());
+            jLabelResult.setText(String.format("Ответ: Y = %.3f", data.getY()));
 
         } catch (NumberFormatException | NotBoundException | RemoteException e) {
             jLabelResult.setText("Ошибка");
             jLabelResult.setForeground(Color.red);
         }
-
-        /*     try {
-            double x = Double.parseDouble(jTextFieldX.getText());
-            double a = Double.parseDouble(jTextFieldA.getText());
-            double b = Double.parseDouble(jTextFieldB.getText());
-
-            Variables data = new Variables(a, b, x);
-            data = (Variables) remoteSolution.getData(data);
-
-            jLabelResult.setText("Ответ: Y = " + data.getY());
-
-        } catch (Exception e) {
-            e.printStackTrace();
-            jLabelResult.setText("ОШИБКА");
-        }*/
     }//GEN-LAST:event_jButtonSolveActionPerformed
 
     /**

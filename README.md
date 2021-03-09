@@ -6,7 +6,8 @@
 Вариант - 1  
 ![primer](primer.png)  
 ## Расчёт значения
-![solution](solution.png)
+![solution1](solution1.png)
+![solution2](solution2.png)
 ## Вывод ошибки
 ![error](error.png)
 ## Сброс значений
